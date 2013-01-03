@@ -1,0 +1,50 @@
+{
+  "by_array": [
+    {
+      "open": {"hour": 8, "minutes": 30},
+      "close": {"hour": 20, "minutes": 30}
+    },
+    {"open": 7, "close": 22},
+    {"open": 7, "close": 22},
+    {"open": 7, "close": 22},
+    {"open": 7, "close": 22},
+    {"open": 7, "close": 22},
+    {"open": 8, "close": 22}
+  ],
+
+  "by_name": {
+    "sunday":    {"open": "8:30", "close": "8:30"},
+    "monday":    {"open": 7, "close": 22},
+    "tuesday":   {"open": 7, "close": 22},
+    "wednesday": {"open": 7, "close": 22},
+    "thursday":  {"open": 7, "close": 22},
+    "friday":    {"open": 7, "close": 22},
+    "saturday":  {"open": 7, "close": 22}
+  },
+
+  "by_short": {
+    "sun": {"open": 6, "close": 6},
+    "mon": {"open": 6, "close": 6},
+    "tue": {"open": 6, "close": 6},
+    "wed": {"open": 6, "close": 6},
+    "thu": {"open": 6, "close": 6},
+    "fri": {"open": 6, "close": 6},
+    "sat": {"open": 6, "close": 6}
+  },
+
+  "by_name_missing_tues_and_thurs": {
+    "sunday":    {"open": "8:30", "close": "8:30"},
+    "monday":    {"open": 7, "close": 22},
+    "wednesday": {"open": 7, "close": 22},
+    "friday":    {"open": 7, "close": 22},
+    "saturday":  {"open": 7, "close": 22}
+  },
+
+  "closed_all_day": {"open": false, "day": "sunday"},
+  "closed_all_day-json": {"open": false, "day": 0},
+  "open_all_day": {"close": false, "day": "saturday"},
+  "open_all_day-json": {"close": false, "day": 6},
+
+  "day-test-sunday": {"open": "8:30", "close": "8:30", "day": "sunday"},
+  "day-test-sunday-json": {"day": 0, "open": {"hour": 8, "minutes": 30}, "close": {"hour": 20, "minutes": 30}}
+}
