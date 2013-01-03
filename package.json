@@ -1,5 +1,5 @@
 {
-  "name": "simple-schedule",
+  "name": "weekly-schedule",
 
   "version": "0.0.1",
 
@@ -38,11 +38,11 @@
 
   "repository": {
     "type": "git",
-    "url": "http://github.com/scryptmouse/simple-schedule.git"
+    "url": "http://github.com/scryptmouse/weekly-schedule.git"
   },
 
   "licenses": {
     "type": "MIT",
-    "url": "https://raw.github.com/scryptmouse/simple-schedule/master/LICENSE-MIT"
+    "url": "https://raw.github.com/scryptmouse/weekly-schedule/master/LICENSE-MIT"
   }
 }

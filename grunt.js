@@ -39,7 +39,7 @@ module.exports = function(grunt) {
     },
 
     docco_husky: {
-      project_name: 'SimpleSchedule',
+      project_name: 'WeeklySchedule',
       files: ['src/schedule.coffee']
     },
 

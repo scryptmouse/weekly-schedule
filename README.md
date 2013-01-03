@@ -1,13 +1,13 @@
-# simple-schedule
+# weekly-schedule
 ### A simple weekly schedule library
 A straightforward prototype for defining a weekly schedule in javascript, that can be queried with `moment`, `Date`, and unix timestamps.
 
 Presently, it supports basic isOpen, isClosed functionality.
 
-It transparently uses AMD or CommonJS (in node.js), or it will attach itself to the global object in other instances as `SimpleSchedule`. It requires [underscore.js] (http://underscorejs.org/ "Underscore.js") and [moment](http://momentjs.com/ "Moment.js | Parse, validate, manipulate, and display dates in javascript.").
+It transparently uses AMD or CommonJS (in node), or it will attach itself to the global object in other instances as `WeeklySchedule`. It requires [underscore.js] (http://underscorejs.org/ "Underscore.js") and [moment](http://momentjs.com/ "Moment.js | Parse, validate, manipulate, and display dates in javascript.").
 
 ## Example
-    var schedule = new SimpleSchedule(json_schedule);
+    var schedule = new WeeklySchedule(json_schedule);
 
     // Assuming you're open at noon on Tuesdays…
     var tuesday_at_noon = moment().hours(12).day(2);
@@ -30,8 +30,8 @@ It transparently uses AMD or CommonJS (in node.js), or it will attach itself to 
     // #=> true / false depending
 
 
-* [annotated source code](http://scryptmouse.github.com/simple-schedule/src/schedule.coffee "Annotated source code")
-* [demo](http://scryptmouse.github.com/simple-schedule/demo/index.htm "simple-schedule demo")
+* [annotated source code](http://scryptmouse.github.com/weekly-schedule/src/schedule.coffee "Annotated source code")
+* [demo](http://scryptmouse.github.com/weekly-schedule/demo/index.htm "weekly-schedule demo")
 
 ## Todo
 * Timezone support for client-side usage

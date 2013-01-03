@@ -1,4 +1,4 @@
-# # SimpleSchedule
+# # WeeklySchedule
 "use strict"
 factory = (require, exports, module) ->
   if require?
@@ -361,7 +361,7 @@ factory = (require, exports, module) ->
   # # Week
   # Main schedule class.
   class Week
-    @name: "SimpleSchedule"
+    @name: "WeeklySchedule"
     constructor: (params) ->
       params ||= generate_base_days()
 
@@ -452,4 +452,4 @@ if define?.amd?
 else if module?
   factory require, module.exports, module
 else
-  @SimpleSchedule = factory()
+  @WeeklySchedule = factory()

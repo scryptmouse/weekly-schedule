@@ -1,4 +1,4 @@
-define(['zepto', 'underscore', 'schedule', 'rainbow', 'json_tree'], function($, _, SimpleSchedule, Rainbow) {
+define(['zepto', 'underscore', 'schedule', 'rainbow', 'json_tree'], function($, _, WeeklySchedule, Rainbow) {
   'use strict';
 
   function Sample(name, data) {
@@ -8,7 +8,7 @@ define(['zepto', 'underscore', 'schedule', 'rainbow', 'json_tree'], function($, 
   }
 
   Sample.prototype.generate = function() {
-    this.schedule = new SimpleSchedule(this.data);
+    this.schedule = new WeeklySchedule(this.data);
     if (window) {
       window[this.name] = this.schedule;
       window[this.name+'Data'] = this.data;
@@ -46,7 +46,7 @@ define(['zepto', 'underscore', 'schedule', 'rainbow', 'json_tree'], function($, 
 
     this.addScript(
       '// Accessible on the window with these names.',
-      'var %name% = new SimpleSchedule(%dataName%);',
+      'var %name% = new WeeklySchedule(%dataName%);',
       ''
     );
   };

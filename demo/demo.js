@@ -25,12 +25,12 @@ require({
   }
 },
 ['zepto', 'rainbow', 'sample-object', 'sample-array', 'schedule'],
-function($, Rainbow, sample_with_object, sample_with_array, SimpleSchedule) {
+function($, Rainbow, sample_with_object, sample_with_array, WeeklySchedule) {
   'use strict';
   $(function() {
     sample_with_object.render('#sample_with_object');
     sample_with_array.render('#sample_with_array');
-    window.SimpleSchedule = SimpleSchedule;
+    window.WeeklySchedule = WeeklySchedule;
 
     $('p code[data-language]').each(function() {
       var $this = $(this);
