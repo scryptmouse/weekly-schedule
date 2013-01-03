@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+  <head>
+    <title>SimpleSchedule Demo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link href="vendor/rainbow-github.css" rel="stylesheet" media="all">
+    <link href="demo.css" rel="stylesheet" media="all">
+  </head>
+  <body>
+    <div class="container">
+      <header class="hero-unit"><h1>SimpleSchedule Demo</h1></header>
+      <div class="row">
+        <div class="span8 offset4">
+          <p>This page demonstrates a bit of <a href="https://scryptmouse.github.com/simple-schedule">simple-schedule</a>'s functionality.</p>
+          <p>The library is attached to the window object on this page as <code>SimpleSchedule</code>.</p>
+        </div>
+      </div>
+      <div class="row sample-row" id="sample_with_object">
+        <div class="span8">
+          <h2>Define a schedule with an object</h2>
+          <p>The schedule can be set up with an object with day names as keys. You can use full or abbreviated (three-letter) names, or even mix and match them if that's your fancy.</p>
+          <p>
+            The times are set by an <code>open</code> and <code>close</code> property, which supports limited parsing.
+            Open times are assumed to be AM, and close times are assumed to be PM. An explicit "am" or "pm" in the time
+            will override this.
+          </p>
+          <p>For a day that is open 24 hours, you can supply <code data-language="javascript">{close: false}</code>.</p>
+          <p>If you want to be closed all day, use <code data-language="javascript">{open: false}</code> or just straight-up <code>false</code>.</p>
+          <div class='js-box'><pre><code data-language="javascript"></code></pre></div>
+        </div>
+        <div class="span3 offset1 json-box"></div>
+      </div><!--./#sample_with_object-->
+      <hr class="clearfix" />
+      <div class="row sample-row" id="sample_with_array">
+        <div class="span3 json-box"></div>
+        <div class="span8 offset1">
+          <h2>Create with an array</h2>
+          <p>
+            The schedule can also be set up with an array, where the index of the array corresponds to
+            a day's index in the week (starting from 0: Sunday, to 6: Saturday).
+          </p>
+          <p><span class="label label-info">Missing an index?</span> If an index is missing, that day will default to being closed all day.</p>
+          <hr>
+          <div class="js-box"></div>
+        </div>
+      </div><!--./#sample_with_array-->
+      <footer class="row">
+        <div class="span6 pull-right">
+          <p>Fire up your JS console and play around with the exported variables.</p>
+          <p>Documented <a href="../src/schedule.coffee.html" title="schedule.coffee">source code</a> is available.</p>
+        </div>
+      </footer>
+    </div>
+    <script src="vendor/require.js" data-main="demo"></script>
+  </body>
+</html>

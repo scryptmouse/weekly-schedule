@@ -1,0 +1,388 @@
+<!DOCTYPE html><html><head><title>schedule.coffee</title><meta http-equiv="Content-Type" content="text/html" charset="UTF-8"><link rel="stylesheet" media="all" href="../docco.css"></head><body><div id="container"><div id="background"></div><div id="jump_to">Jump To &hellip;<div id="jump_wrapper"><div id="jump_page"><a href="../index.html" class="source"><span class="file_name">README</span></a><a href="../src/schedule.coffee.html" class="source selected"><span class="base_path">src / </span><span class="file_name">schedule.coffee</span></a></div></div></div><table cellpadding="0" cellspacing="0"><thead><tr><th class="docs"><h1>schedule.coffee</h1><div class="filepath">src/</div></th><th class="code"></th></tr></thead><tbody><tr id="section-1"><td class="docs"><div class="pilwrap"><a href="#section-1" class="pilcrow">&#182;</a></div><h1>SimpleSchedule</h1>
+</td><td class="code"><div class="highlight"><pre><span class="s">&quot;use strict&quot;</span>
+<span class="nv">factory = </span><span class="nf">(require, exports, module) -&gt;</span>
+  <span class="k">if</span> <span class="nx">require</span><span class="o">?</span>
+    <span class="nv">moment = </span><span class="nx">require</span> <span class="s">&#39;moment&#39;</span>
+    <span class="nv">_ = </span><span class="nx">require</span> <span class="s">&#39;underscore&#39;</span>
+  <span class="k">else</span> <span class="k">if</span> <span class="nb">window</span><span class="o">?</span>
+    <span class="p">{</span><span class="nx">moment</span><span class="p">,</span> <span class="nx">_</span><span class="p">}</span> <span class="o">=</span> <span class="nb">window</span></pre></div></td></tr><tr id="section-2"><td class="docs"><div class="pilwrap"><a href="#section-2" class="pilcrow">&#182;</a></div><h2>Schedule Helpers</h2>
+</td><td class="code"><div class="highlight"><pre>  <span class="nv">dayNames = </span><span class="p">[</span><span class="s">&#39;Sunday&#39;</span><span class="p">,</span> <span class="s">&#39;Monday&#39;</span><span class="p">,</span> <span class="s">&#39;Tuesday&#39;</span><span class="p">,</span> <span class="s">&#39;Wednesday&#39;</span><span class="p">,</span> <span class="s">&#39;Thursday&#39;</span><span class="p">,</span> <span class="s">&#39;Friday&#39;</span><span class="p">,</span> <span class="s">&#39;Saturday&#39;</span><span class="p">]</span>
+
+  <span class="nv">Helpers = </span><span class="p">{}</span>
+
+  <span class="nv">Helpers.currentDay = currentDay = </span><span class="o">-&gt;</span>
+    <span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">())</span><span class="o">?</span><span class="p">.</span><span class="nx">getDay</span><span class="p">()</span></pre></div></td></tr><tr id="section-3"><td class="docs"><div class="pilwrap"><a href="#section-3" class="pilcrow">&#182;</a></div><p>Generate an array of <code>moment</code> objects based on a range.
+Will default to 24 hours (0000-2300) on Sunday (dayIndex 0).</p>
+</td><td class="code"><div class="highlight"><pre>  <span class="nv">Helpers.rangeOfMoments = Helpers.range = rangeOfMoments = </span><span class="nf">(dayIndex = 0, start = 0, end = 24, startMinutes = 0, endMinutes = 0) -&gt;</span>
+    <span class="nv">range = </span><span class="nx">_</span><span class="p">(</span><span class="nx">start</span><span class="p">).</span><span class="nx">chain</span><span class="p">().</span><span class="nx">range</span><span class="p">(</span><span class="nx">end</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nf">(hour) -&gt;</span>
+      <span class="k">return</span> <span class="nx">moment</span><span class="p">().</span><span class="nx">day</span><span class="p">(</span><span class="nx">dayIndex</span><span class="p">).</span><span class="nx">hours</span><span class="p">(</span><span class="nx">hour</span><span class="p">).</span><span class="nx">minutes</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    <span class="p">).</span><span class="nx">value</span><span class="p">()</span></pre></div></td></tr><tr id="section-4"><td class="docs"><div class="pilwrap"><a href="#section-4" class="pilcrow">&#182;</a></div><p>Set the first and last <code>moment</code> objects to specific minutes if defined.</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nx">range</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">minutes</span><span class="p">(</span><span class="nx">startMinutes</span><span class="p">)</span> <span class="k">if</span> <span class="nx">startMinutes</span>
+    <span class="nx">range</span><span class="p">[</span><span class="nx">range</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">].</span><span class="nx">minutes</span><span class="p">(</span><span class="nx">endMinutes</span><span class="p">)</span> <span class="k">if</span> <span class="nx">endMinutes</span>
+
+    <span class="k">return</span> <span class="nx">range</span></pre></div></td></tr><tr id="section-5"><td class="docs"><div class="pilwrap"><a href="#section-5" class="pilcrow">&#182;</a></div><p>Quick and dirty JSON cloning</p>
+</td><td class="code"><div class="highlight"><pre>  <span class="nv">clone = </span><span class="nf">(o = {}) -&gt;</span>
+    <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">o</span><span class="p">))</span>
+
+  <span class="nv">ucfirst = </span><span class="nf">(s) -&gt;</span>
+    <span class="nv">s = </span><span class="s">&#39;&#39;</span><span class="o">+</span><span class="nx">s</span>
+    <span class="k">return</span> <span class="nx">s</span><span class="p">.</span><span class="nx">charAt</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">toUpperCase</span><span class="p">()</span> <span class="o">+</span> <span class="nx">s</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="nx">toLowerCase</span><span class="p">()</span></pre></div></td></tr><tr id="section-6"><td class="docs"><div class="pilwrap"><a href="#section-6" class="pilcrow">&#182;</a></div><h1>DayHelper</h1>
+
+<p><code>DayHelper</code> facilitates easy matching of a day,
+and is used throughout the library.</p>
+</td><td class="code"><div class="highlight"><pre>  <span class="k">class</span> <span class="nx">DayHelper</span>
+    <span class="nv">constructor: </span><span class="nf">(Name, index) -&gt;</span>
+      <span class="vi">@index = </span><span class="nx">index</span>
+
+      <span class="vi">@Name = </span><span class="nx">ucfirst</span><span class="p">(</span><span class="nx">Name</span><span class="p">)</span>
+      <span class="vi">@name = </span><span class="nx">Name</span><span class="p">.</span><span class="nx">toLowerCase</span><span class="p">()</span>
+      <span class="vi">@short = </span><span class="nx">@name</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+      <span class="vi">@Short = </span><span class="nx">ucfirst</span><span class="p">(</span><span class="nx">@short</span><span class="p">)</span></pre></div></td></tr><tr id="section-7"><td class="docs"><div class="pilwrap"><a href="#section-7" class="pilcrow">&#182;</a></div><p>Return capitalized name</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">toString: </span><span class="o">-&gt;</span> <span class="nx">@Name</span></pre></div></td></tr><tr id="section-8"><td class="docs"><div class="pilwrap"><a href="#section-8" class="pilcrow">&#182;</a></div><p>Return day index</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">valueOf: </span><span class="o">-&gt;</span> <span class="nx">@index</span></pre></div></td></tr><tr id="section-9"><td class="docs"><div class="pilwrap"><a href="#section-9" class="pilcrow">&#182;</a></div><p>For use with _.map</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="vi">@factory: </span><span class="nf">(name, index) -&gt;</span>
+      <span class="k">return</span> <span class="k">new</span> <span class="nx">DayHelper</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">index</span><span class="p">)</span></pre></div></td></tr><tr id="section-10"><td class="docs"><div class="pilwrap"><a href="#section-10" class="pilcrow">&#182;</a></div><h3>Finders</h3>
+
+<p><code>find</code> is designed to be very flexible. It can be passed any parameter used
+to define a day, and will return the corresponding DayHelper object if one
+exists.</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="vi">@find = </span><span class="nx">_</span><span class="p">.</span><span class="nx">memoize</span> <span class="p">(</span><span class="nx">needle</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="k">return</span> <span class="nx">_</span><span class="p">(</span><span class="nx">@days</span><span class="p">).</span><span class="nx">find</span> <span class="nf">(day) -&gt;</span>
+        <span class="k">return</span> <span class="nx">_</span><span class="p">(</span><span class="nx">day</span><span class="p">).</span><span class="nx">contains</span><span class="p">(</span><span class="nx">needle</span><span class="p">)</span></pre></div></td></tr><tr id="section-11"><td class="docs"><div class="pilwrap"><a href="#section-11" class="pilcrow">&#182;</a></div><p>Safe wrapper around find to extract a property.
+If unknown needle or property, returns <code>undefined</code>.</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="vi">@get = </span><span class="p">(</span><span class="nx">needle</span><span class="p">,</span> <span class="nx">property</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="nv">day = </span><span class="nx">@find</span><span class="p">(</span><span class="nx">needle</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="nx">day</span><span class="o">?</span> <span class="o">and</span> <span class="nx">property</span><span class="o">?</span>
+        <span class="nx">day</span><span class="p">[</span><span class="nx">property</span><span class="p">]</span>
+      <span class="k">else</span>
+        <span class="nx">day</span></pre></div></td></tr><tr id="section-12"><td class="docs"><div class="pilwrap"><a href="#section-12" class="pilcrow">&#182;</a></div><h4>Current Day finder methods</h4>
+
+<p>Return the DayHelper for the current day</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="vi">@getCurrentDay = </span><span class="o">=&gt;</span>
+      <span class="nx">@find</span><span class="p">(</span><span class="nx">currentDay</span><span class="p">())</span></pre></div></td></tr><tr id="section-13"><td class="docs"><div class="pilwrap"><a href="#section-13" class="pilcrow">&#182;</a></div><p>Wrapper around <code>get()</code> that uses the current
+day index as needle.</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="vi">@getCurrent = </span><span class="p">(</span><span class="nx">property</span><span class="p">)</span> <span class="o">=&gt;</span>
+      <span class="nx">@get</span><span class="p">(</span><span class="nx">currentDay</span><span class="p">(),</span> <span class="nx">property</span><span class="p">)</span></pre></div></td></tr><tr id="section-14"><td class="docs"><div class="pilwrap"><a href="#section-14" class="pilcrow">&#182;</a></div><p>Generate days</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="vi">@days = </span><span class="nx">_</span><span class="p">.</span><span class="nx">map</span> <span class="nx">dayNames</span><span class="p">,</span> <span class="nx">@factory</span></pre></div></td></tr><tr id="section-15"><td class="docs"><div class="pilwrap"><a href="#section-15" class="pilcrow">&#182;</a></div><p>Export 'name' properties</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="vi">@Names = </span><span class="nx">dayNames</span>
+    <span class="vi">@names = </span><span class="nx">_</span><span class="p">(</span><span class="nx">@days</span><span class="p">).</span><span class="nx">pluck</span><span class="p">(</span><span class="s">&#39;name&#39;</span><span class="p">)</span></pre></div></td></tr><tr id="section-16"><td class="docs"><div class="pilwrap"><a href="#section-16" class="pilcrow">&#182;</a></div><p>These functions are assigned to variables for
+less typing and better mangling when minified.</p>
+</td><td class="code"><div class="highlight"><pre>  <span class="nv">dh_find = </span><span class="nx">DayHelper</span><span class="p">.</span><span class="nx">find</span>
+  <span class="nv">dh_get = </span><span class="nx">DayHelper</span><span class="p">.</span><span class="nx">get</span></pre></div></td></tr><tr id="section-17"><td class="docs"><div class="pilwrap"><a href="#section-17" class="pilcrow">&#182;</a></div><h1>Point</h1>
+
+<p>Representing a point in time, e.g. open or close</p>
+</td><td class="code"><div class="highlight"><pre>  <span class="k">class</span> <span class="nx">Point</span>
+    <span class="nv">constructor: </span><span class="nf">(time = 0, day) -&gt;</span>
+      <span class="nx">@setTime</span><span class="p">(</span><span class="nx">time</span><span class="p">)</span>
+      <span class="nx">@setDay</span><span class="p">(</span><span class="nx">day</span><span class="p">)</span></pre></div></td></tr><tr id="section-18"><td class="docs"><div class="pilwrap"><a href="#section-18" class="pilcrow">&#182;</a></div><p>defaultAMPM is blank.</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">defaultAMPM: </span><span class="s">&#39;&#39;</span></pre></div></td></tr><tr id="section-19"><td class="docs"><div class="pilwrap"><a href="#section-19" class="pilcrow">&#182;</a></div><p>Set the day index of the Point, as it's used to
+generate the <code>moment</code>.</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">setDay: </span><span class="nf">(day) -&gt;</span>
+      <span class="nv">day = </span><span class="nx">currentDay</span><span class="p">()</span> <span class="nx">unless</span> <span class="nx">day</span><span class="o">?</span>
+      <span class="vi">@day = </span><span class="o">+</span><span class="nx">day</span>
+      <span class="k">return</span> <span class="nx">@</span></pre></div></td></tr><tr id="section-20"><td class="docs"><div class="pilwrap"><a href="#section-20" class="pilcrow">&#182;</a></div><p>Parses a given time and sets it if it is valid.</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">setTime: </span><span class="nf">(time) -&gt;</span>
+      <span class="nv">parsed = </span><span class="nx">@parse</span><span class="p">(</span><span class="nx">time</span><span class="p">)</span>
+
+      <span class="vi">@time = </span><span class="nx">parsed</span> <span class="k">if</span> <span class="nx">validateTime</span><span class="p">(</span><span class="nx">parsed</span><span class="p">)</span>
+
+      <span class="k">return</span> <span class="nx">@</span></pre></div></td></tr><tr id="section-21"><td class="docs"><div class="pilwrap"><a href="#section-21" class="pilcrow">&#182;</a></div><p>Get the hour (0-23)</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">getHour: </span><span class="o">-&gt;</span> <span class="nx">@time</span><span class="o">?</span><span class="p">.</span><span class="nx">hour</span> <span class="o">or</span> <span class="mi">0</span></pre></div></td></tr><tr id="section-22"><td class="docs"><div class="pilwrap"><a href="#section-22" class="pilcrow">&#182;</a></div><p>Get the minutes (0-59)</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">getMinutes: </span><span class="o">-&gt;</span> <span class="nx">@time</span><span class="o">?</span><span class="p">.</span><span class="nx">minutes</span> <span class="o">or</span> <span class="mi">0</span>
+
+    <span class="nv">isValid: </span><span class="o">-&gt;</span> <span class="nx">validateTime</span> <span class="nx">@time</span></pre></div></td></tr><tr id="section-23"><td class="docs"><div class="pilwrap"><a href="#section-23" class="pilcrow">&#182;</a></div><p>parse a string or numerical time into a
+proper object if possible, or return
+an invalid time</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">parse: </span><span class="nf">(time = false) -&gt;</span>
+      <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isNumber</span><span class="p">(</span><span class="nx">time</span><span class="p">)</span> <span class="o">or</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isString</span><span class="p">(</span><span class="nx">time</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nx">parseFromString</span><span class="p">(</span><span class="nx">time</span><span class="p">,</span> <span class="nx">@defaultAMPM</span><span class="p">)</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isObject</span><span class="p">(</span><span class="nx">time</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nx">_</span><span class="p">(</span><span class="nx">time</span><span class="p">).</span><span class="nx">pick</span><span class="p">(</span><span class="s">&#39;hour&#39;</span><span class="p">,</span> <span class="s">&#39;minutes&#39;</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="k">return</span> <span class="p">{</span><span class="nv">hour: </span><span class="kc">null</span><span class="p">,</span> <span class="nv">minutes: </span><span class="mi">0</span><span class="p">}</span></pre></div></td></tr><tr id="section-24"><td class="docs"><div class="pilwrap"><a href="#section-24" class="pilcrow">&#182;</a></div><p>Return a <code>moment</code> set to this point in time.</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">moment: </span><span class="o">-&gt;</span>
+      <span class="nx">moment</span><span class="p">().</span><span class="nx">startOf</span><span class="p">(</span><span class="s">&#39;day&#39;</span><span class="p">).</span><span class="nx">day</span><span class="p">(</span><span class="nx">@day</span><span class="p">).</span><span class="nx">hours</span><span class="p">(</span><span class="nx">@getHour</span><span class="p">()).</span><span class="nx">minutes</span><span class="p">(</span><span class="nx">@getMinutes</span><span class="p">())</span></pre></div></td></tr><tr id="section-25"><td class="docs"><div class="pilwrap"><a href="#section-25" class="pilcrow">&#182;</a></div><h3>Comparison functions</h3>
+
+<p>For use with 'open' times.</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">isBefore: </span><span class="nf">(time) -&gt;</span>
+      <span class="nx">@moment</span><span class="p">().</span><span class="nx">diff</span><span class="p">(</span><span class="nx">time</span><span class="p">,</span> <span class="s">&#39;minutes&#39;</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span></pre></div></td></tr><tr id="section-26"><td class="docs"><div class="pilwrap"><a href="#section-26" class="pilcrow">&#182;</a></div><h4>isAfter <code>(time)</code></h4>
+
+<p>compare against -1 to account for
+<code>moment.fn.diff</code>'s rounding on seconds.</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">isAfter: </span><span class="nf">(time) -&gt;</span>
+      <span class="nx">@moment</span><span class="p">().</span><span class="nx">diff</span><span class="p">(</span><span class="nx">time</span><span class="p">,</span> <span class="s">&#39;minutes&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="o">-</span><span class="mi">1</span>
+
+    <span class="nv">toJSON: </span><span class="o">-&gt;</span>
+      <span class="nx">_</span><span class="p">(</span><span class="nx">@time</span><span class="p">).</span><span class="nx">pick</span> <span class="s">&#39;hour&#39;</span><span class="p">,</span> <span class="s">&#39;minutes&#39;</span>
+
+    <span class="nv">toString: </span><span class="o">-&gt;</span>
+      <span class="nx">@moment</span><span class="p">().</span><span class="nx">format</span><span class="p">(</span><span class="s">&#39;h:mm A&#39;</span><span class="p">)</span>
+
+    <span class="nv">validateTime = </span><span class="nf">(time = {}) -&gt;</span></pre></div></td></tr><tr id="section-27"><td class="docs"><div class="pilwrap"><a href="#section-27" class="pilcrow">&#182;</a></div><p>time must be defined and have hour property</p>
+</td><td class="code"><div class="highlight"><pre>      <span class="k">return</span> <span class="kc">false</span> <span class="nx">unless</span> <span class="nx">time</span><span class="o">?</span> <span class="o">and</span> <span class="nx">time</span><span class="p">.</span><span class="nx">hour</span><span class="o">?</span></pre></div></td></tr><tr id="section-28"><td class="docs"><div class="pilwrap"><a href="#section-28" class="pilcrow">&#182;</a></div><p>hour must be within a valid range</p>
+</td><td class="code"><div class="highlight"><pre>      <span class="k">return</span> <span class="kc">false</span> <span class="k">if</span> <span class="mi">0</span> <span class="o">&gt;</span> <span class="nx">time</span><span class="p">.</span><span class="nx">hour</span> <span class="o">or</span> <span class="nx">time</span><span class="p">.</span><span class="nx">hour</span> <span class="o">&gt;</span> <span class="mi">23</span></pre></div></td></tr><tr id="section-29"><td class="docs"><div class="pilwrap"><a href="#section-29" class="pilcrow">&#182;</a></div><p>minutes must be within a valid range</p>
+</td><td class="code"><div class="highlight"><pre>      <span class="k">return</span> <span class="kc">false</span> <span class="k">if</span> <span class="nx">time</span><span class="p">.</span><span class="nx">minutes</span><span class="o">?</span> <span class="o">and</span> <span class="p">(</span><span class="mi">0</span> <span class="o">&gt;</span> <span class="nx">time</span><span class="p">.</span><span class="nx">minutes</span> <span class="o">or</span> <span class="nx">time</span><span class="p">.</span><span class="nx">minutes</span> <span class="o">&gt;</span> <span class="mi">59</span><span class="p">)</span>
+
+      <span class="k">return</span> <span class="kc">true</span>
+
+    <span class="nv">hoursRgx = </span><span class="sr">/^([0-2]?\d):?([0-5]\d)?\s?([aApP][mM])?$/</span>
+
+    <span class="nv">parseFromString = </span><span class="nf">(s, defaultAMPM = &#39;&#39;) -&gt;</span></pre></div></td></tr><tr id="section-30"><td class="docs"><div class="pilwrap"><a href="#section-30" class="pilcrow">&#182;</a></div><p>Coerce to string</p>
+</td><td class="code"><div class="highlight"><pre>      <span class="nv">s = </span><span class="s">&#39;&#39;</span><span class="o">+</span><span class="nx">s</span>
+
+      <span class="nv">time = </span><span class="p">{</span><span class="nv">hour: </span><span class="kc">null</span><span class="p">,</span> <span class="nv">minutes: </span><span class="kc">null</span><span class="p">}</span>
+
+      <span class="nv">matches = </span><span class="nx">s</span><span class="p">.</span><span class="nx">match</span><span class="p">(</span><span class="nx">hoursRgx</span><span class="p">)</span>
+
+      <span class="k">if</span> <span class="nx">matches</span>
+        <span class="nv">time.hour = </span><span class="o">+</span><span class="nx">matches</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="nv">time.minutes = </span><span class="o">+</span><span class="nx">matches</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">||</span> <span class="mi">0</span>
+
+        <span class="nv">ampm = </span><span class="p">(</span><span class="nx">matches</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">||</span> <span class="nx">defaultAMPM</span><span class="p">).</span><span class="nx">toLowerCase</span><span class="p">()</span>
+
+        <span class="nv">isPM = </span><span class="p">(</span><span class="nx">ampm</span> <span class="o">is</span> <span class="s">&#39;pm&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nx">isPM</span> <span class="o">and</span> <span class="nx">time</span><span class="p">.</span><span class="nx">hour</span> <span class="o">&lt;</span> <span class="mi">12</span>
+          <span class="nx">time</span><span class="p">.</span><span class="nx">hour</span> <span class="o">+=</span> <span class="mi">12</span>
+
+      <span class="k">return</span> <span class="nx">time</span>
+
+  <span class="k">class</span> <span class="nx">OpenPoint</span> <span class="k">extends</span> <span class="nx">Point</span>
+    <span class="nv">defaultAMPM: </span><span class="s">&#39;am&#39;</span>
+
+  <span class="nv">Point.Open = </span><span class="nx">OpenPoint</span>
+
+  <span class="nv">Point.open = </span><span class="nf">(time, day) -&gt;</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">OpenPoint</span><span class="p">(</span><span class="nx">time</span><span class="p">,</span> <span class="nx">day</span><span class="p">)</span>
+
+  <span class="k">class</span> <span class="nx">ClosePoint</span> <span class="k">extends</span> <span class="nx">Point</span>
+    <span class="nv">defaultAMPM: </span><span class="s">&#39;pm&#39;</span>
+
+  <span class="nv">Point.Close = </span><span class="nx">ClosePoint</span>
+
+  <span class="nv">Point.close = </span><span class="nf">(time, day) -&gt;</span>
+    <span class="k">return</span> <span class="k">new</span> <span class="nx">ClosePoint</span><span class="p">(</span><span class="nx">time</span><span class="p">,</span> <span class="nx">day</span><span class="p">)</span></pre></div></td></tr><tr id="section-31"><td class="docs"><div class="pilwrap"><a href="#section-31" class="pilcrow">&#182;</a></div><h1>Day</h1>
+
+<p>Generic day class.
+It has <code>open</code> and <code>close</code> properties (that are an <code>OpenPoint</code> and <code>ClosePoint</code> respectively)
+If no or an invalid time is provided, it will default to being closed all day.</p>
+</td><td class="code"><div class="highlight"><pre>  <span class="k">class</span> <span class="nx">Day</span>
+    <span class="nv">constructor: </span><span class="nf">(params = {}) -&gt;</span>
+      <span class="nv">params = </span><span class="nx">clone</span> <span class="nx">params</span>
+      <span class="nx">@setDayAndName</span><span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">day</span><span class="p">)</span>
+      <span class="nx">@setTimes</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span>
+
+    <span class="nv">getOpenRange: </span><span class="o">-&gt;</span></pre></div></td></tr><tr id="section-32"><td class="docs"><div class="pilwrap"><a href="#section-32" class="pilcrow">&#182;</a></div><p>args for rangeOfMoments
+0: day, 1: start, 2: end, 3: startMinutes, 4: endMinutes</p>
+</td><td class="code"><div class="highlight"><pre>      <span class="nv">args = </span><span class="p">[</span><span class="nx">@day</span><span class="p">]</span>
+
+      <span class="k">if</span> <span class="nx">@isOpenAllDay</span>
+        <span class="nx">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="nx">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mi">24</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="nx">@isClosedAllDay</span>
+        <span class="nx">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="nx">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+      <span class="k">else</span>
+        <span class="nv">om = </span><span class="nx">@open</span><span class="p">.</span><span class="nx">moment</span><span class="p">()</span>
+        <span class="nv">cm = </span><span class="nx">@close</span><span class="p">.</span><span class="nx">moment</span><span class="p">()</span>
+        <span class="nx">args</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nx">om</span><span class="p">.</span><span class="nx">hours</span><span class="p">()</span></pre></div></td></tr><tr id="section-33"><td class="docs"><div class="pilwrap"><a href="#section-33" class="pilcrow">&#182;</a></div><p>Must add 1 to closing hour for _.range</p>
+</td><td class="code"><div class="highlight"><pre>        <span class="nx">args</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nx">cm</span><span class="p">.</span><span class="nx">hours</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="nx">args</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="nx">om</span><span class="p">.</span><span class="nx">minutes</span><span class="p">()</span>
+        <span class="nx">args</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="nx">cm</span><span class="p">.</span><span class="nx">minutes</span><span class="p">()</span>
+
+      <span class="k">return</span> <span class="nx">rangeOfMoments</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">args</span><span class="p">)</span>
+
+    <span class="nv">isClosedAllDay: </span><span class="kc">false</span>
+
+    <span class="nv">isOpenAllDay: </span><span class="kc">false</span></pre></div></td></tr><tr id="section-34"><td class="docs"><div class="pilwrap"><a href="#section-34" class="pilcrow">&#182;</a></div><p>Support an optional <code>now</code> argument that can be a
+<code>moment</code>, <code>Date</code>, or unix timestamp. Will default
+to the current time if not provided.</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">isOpen: </span><span class="nf">(now) -&gt;</span>
+      <span class="nx">unless</span> <span class="nx">now</span> <span class="o">and</span> <span class="nx">moment</span><span class="p">.</span><span class="nx">isMoment</span><span class="p">(</span><span class="nx">now</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nx">now</span>
+          <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isDate</span><span class="p">(</span><span class="nx">now</span><span class="p">)</span>
+            <span class="nv">now = </span><span class="nx">moment</span><span class="p">(</span><span class="nx">now</span><span class="p">)</span>
+          <span class="k">else</span> <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nb">isFinite</span><span class="p">(</span><span class="o">+</span><span class="nx">now</span><span class="p">)</span>
+            <span class="nv">now = </span><span class="nx">moment</span><span class="p">(</span><span class="o">+</span><span class="nx">now</span><span class="p">)</span>
+        <span class="k">else</span>
+          <span class="nv">now = </span><span class="nx">moment</span><span class="p">()</span>
+
+      <span class="k">if</span> <span class="nx">@isClosedAllDay</span> <span class="o">or</span> <span class="p">(</span><span class="nx">now</span><span class="p">.</span><span class="nx">day</span><span class="p">()</span> <span class="o">isnt</span> <span class="nx">@day</span><span class="p">)</span>
+        <span class="kc">false</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="nx">@isOpenAllDay</span>
+        <span class="kc">true</span>
+      <span class="k">else</span>
+        <span class="nx">@open</span><span class="o">?</span><span class="p">.</span><span class="nx">isBefore</span><span class="o">?</span><span class="p">(</span><span class="nx">now</span><span class="p">)</span> <span class="o">and</span> <span class="nx">@close</span><span class="o">?</span><span class="p">.</span><span class="nx">isAfter</span><span class="o">?</span><span class="p">(</span><span class="nx">now</span><span class="p">)</span>
+
+    <span class="nv">isClosed: </span><span class="nf">(now = false) -&gt;</span>
+      <span class="o">!</span><span class="nx">@isOpen</span><span class="p">(</span><span class="nx">now</span><span class="p">)</span>
+
+    <span class="nv">setDayAndName: </span><span class="nf">(day) -&gt;</span>
+      <span class="nv">day = </span><span class="nx">DayHelper</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="nx">day</span><span class="p">)</span>
+
+      <span class="vi">@day = </span><span class="nx">day</span><span class="o">?</span><span class="p">.</span><span class="nx">index</span>
+      <span class="vi">@name = </span><span class="nx">day</span><span class="o">?</span><span class="p">.</span><span class="nx">Name</span>
+      <span class="nx">@</span>
+
+    <span class="nv">setTimes: </span><span class="nf">(params) -&gt;</span>
+      <span class="k">if</span> <span class="p">((</span><span class="nx">params</span><span class="p">.</span><span class="nx">open</span> <span class="o">or</span> <span class="nx">params</span><span class="p">.</span><span class="nx">close</span><span class="p">)</span> <span class="o">and</span> <span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">close</span> <span class="o">isnt</span> <span class="kc">false</span> <span class="o">and</span> <span class="nx">params</span><span class="p">.</span><span class="nx">open</span> <span class="o">isnt</span> <span class="kc">false</span><span class="p">))</span>
+        <span class="nx">setOpenAndClose</span> <span class="k">this</span><span class="p">,</span> <span class="nx">params</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">params</span><span class="p">.</span><span class="nx">close</span> <span class="o">is</span> <span class="kc">false</span><span class="p">)</span>
+        <span class="nx">setOpenAllDay</span> <span class="k">this</span>
+      <span class="k">else</span>
+        <span class="nx">setClosedAllDay</span> <span class="k">this</span>
+      <span class="nx">@</span>
+
+    <span class="nv">tomorrow: </span><span class="o">-&gt;</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="p">(</span><span class="nx">@day</span> <span class="o">==</span> <span class="mi">6</span><span class="p">)</span> <span class="k">then</span> <span class="mi">0</span> <span class="k">else</span> <span class="nx">@day</span> <span class="o">+</span> <span class="mi">1</span>
+
+    <span class="nv">yesterday: </span><span class="o">-&gt;</span>
+      <span class="k">return</span> <span class="k">if</span> <span class="p">(</span><span class="nx">@day</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="k">then</span> <span class="mi">6</span> <span class="k">else</span> <span class="nx">@day</span> <span class="o">-</span> <span class="mi">1</span>
+
+    <span class="nv">toJSON: </span><span class="o">-&gt;</span>
+      <span class="nv">params = </span><span class="p">{</span><span class="nv">day: </span><span class="nx">@day</span><span class="p">}</span>
+
+      <span class="k">if</span> <span class="nx">@isOpenAllDay</span>
+        <span class="nv">params.close = </span><span class="kc">false</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="nx">@isClosedAllDay</span>
+        <span class="nv">params.open = </span><span class="kc">false</span>
+      <span class="k">else</span>
+        <span class="nv">params.open = </span><span class="nx">@open</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">()</span>
+        <span class="nv">params.close = </span><span class="nx">@close</span><span class="p">.</span><span class="nx">toJSON</span><span class="p">()</span>
+
+      <span class="k">return</span> <span class="nx">params</span>
+
+    <span class="nv">toString: </span><span class="o">-&gt;</span>
+      <span class="k">if</span> <span class="nx">@isOpenAllDay</span>
+        <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@name</span><span class="si">}</span><span class="s">: Open 24 Hours&quot;</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="nx">@isClosedAllDay</span>
+        <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@name</span><span class="si">}</span><span class="s">: Closed&quot;</span>
+      <span class="k">else</span>
+        <span class="k">return</span> <span class="s">&quot;</span><span class="si">#{</span><span class="nx">@name</span><span class="si">}</span><span class="s">: </span><span class="si">#{</span><span class="nx">@open</span><span class="si">}</span><span class="s"> - </span><span class="si">#{</span><span class="nx">@close</span><span class="si">}</span><span class="s">&quot;</span></pre></div></td></tr><tr id="section-35"><td class="docs"><div class="pilwrap"><a href="#section-35" class="pilcrow">&#182;</a></div><p>Iteratively generate isDay methods, e.g. isSunday, isMonday</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nx">_</span><span class="p">.</span><span class="nx">extend</span> <span class="nx">@prototype</span><span class="p">,</span> <span class="nx">do</span> <span class="o">-&gt;</span>
+      <span class="nx">_</span><span class="p">(</span><span class="nx">dayNames</span><span class="p">).</span><span class="nx">reduce</span><span class="p">(</span><span class="nf">(functions, name, idx) -&gt;</span>
+        <span class="nx">functions</span><span class="p">[</span><span class="s">&quot;is</span><span class="si">#{</span><span class="nx">name</span><span class="si">}</span><span class="s">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-&gt;</span>
+          <span class="nx">@day</span> <span class="o">==</span> <span class="nx">idx</span>
+
+        <span class="nx">functions</span>
+      <span class="p">{})</span></pre></div></td></tr><tr id="section-36"><td class="docs"><div class="pilwrap"><a href="#section-36" class="pilcrow">&#182;</a></div><p>Factory method for use with _.map</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="vi">@factory: </span><span class="nf">(params, idx) -&gt;</span>
+      <span class="nv">params = </span><span class="p">{</span><span class="nv">open: </span><span class="kc">false</span><span class="p">}</span> <span class="nx">unless</span> <span class="nx">params</span>
+      <span class="nv">params = </span><span class="nx">clone</span> <span class="nx">params</span>
+
+      <span class="nx">unless</span> <span class="nx">_</span><span class="p">(</span><span class="nx">params</span><span class="p">).</span><span class="nx">has</span><span class="p">(</span><span class="s">&#39;day&#39;</span><span class="p">)</span>
+        <span class="nv">params.day = </span><span class="o">+</span><span class="nx">idx</span>
+
+      <span class="k">new</span> <span class="nx">Day</span><span class="p">(</span><span class="nx">params</span><span class="p">)</span></pre></div></td></tr><tr id="section-37"><td class="docs"><div class="pilwrap"><a href="#section-37" class="pilcrow">&#182;</a></div><h3>Private setters</h3>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">setOpenAndClose = </span><span class="nf">(day, params) -&gt;</span>
+      <span class="nv">day.isOpenAllDay = day.isClosedAllDay = </span><span class="kc">false</span>
+      <span class="nx">setOpen</span><span class="p">(</span><span class="nx">day</span><span class="p">,</span> <span class="nx">params</span><span class="p">.</span><span class="nx">open</span><span class="p">)</span>
+      <span class="nx">setClose</span><span class="p">(</span><span class="nx">day</span><span class="p">,</span> <span class="nx">params</span><span class="p">.</span><span class="nx">close</span><span class="p">)</span>
+
+    <span class="nv">setClose = </span><span class="nf">(day, close) -&gt;</span>
+      <span class="nx">close</span> <span class="o">||=</span> <span class="s">&quot;23:59&quot;</span>
+      <span class="nv">day.close = </span><span class="nx">Point</span><span class="p">.</span><span class="nx">close</span><span class="p">(</span><span class="nx">close</span><span class="p">,</span> <span class="nx">day</span><span class="p">.</span><span class="nx">day</span><span class="p">)</span>
+
+    <span class="nv">setOpen = </span><span class="nf">(day, open) -&gt;</span>
+      <span class="nx">open</span> <span class="o">||=</span> <span class="mi">0</span>
+      <span class="nv">day.open = </span><span class="nx">Point</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="nx">open</span><span class="p">,</span> <span class="nx">day</span><span class="p">.</span><span class="nx">day</span><span class="p">)</span>
+
+    <span class="nv">setOpenAllDay = </span><span class="nf">(day) -&gt;</span>
+      <span class="nv">day.open = day.close = </span><span class="kc">null</span>
+      <span class="nv">day.isOpenAllDay = </span><span class="kc">true</span>
+      <span class="nv">day.isClosedAllDay = </span><span class="kc">false</span>
+
+    <span class="nv">setClosedAllDay = </span><span class="nf">(day) -&gt;</span>
+      <span class="nv">day.open = day.close = </span><span class="kc">null</span>
+      <span class="nv">day.isOpenAllDay = </span><span class="kc">false</span>
+      <span class="nv">day.isClosedAllDay = </span><span class="kc">true</span></pre></div></td></tr><tr id="section-38"><td class="docs"><div class="pilwrap"><a href="#section-38" class="pilcrow">&#182;</a></div><h1>Week</h1>
+
+<p>Main schedule class.</p>
+</td><td class="code"><div class="highlight"><pre>  <span class="k">class</span> <span class="nx">Week</span>
+    <span class="vi">@name: </span><span class="s">&quot;SimpleSchedule&quot;</span>
+    <span class="nv">constructor: </span><span class="nf">(params) -&gt;</span>
+      <span class="nx">params</span> <span class="o">||=</span> <span class="nx">generate_base_days</span><span class="p">()</span>
+
+      <span class="nx">@setDays</span> <span class="nx">params</span>
+
+    <span class="nv">day: </span><span class="nf">(needle) -&gt;</span>
+      <span class="nx">@getDays</span><span class="p">()[</span><span class="nx">dh_get</span><span class="p">(</span><span class="nx">needle</span><span class="p">,</span> <span class="s">&#39;Name&#39;</span><span class="p">)]</span>
+
+    <span class="nv">getDays: </span><span class="o">-&gt;</span> <span class="nx">@__days</span>
+
+    <span class="nv">setDays: </span><span class="nf">(days) -&gt;</span>
+      <span class="vi">@__days = </span><span class="p">{}</span>
+
+      <span class="k">if</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">days</span><span class="p">)</span>
+        <span class="nv">newDays = </span><span class="nx">_</span><span class="p">(</span><span class="nx">array_defaults</span><span class="p">(</span><span class="nx">days</span><span class="p">)).</span><span class="nx">map</span> <span class="nx">Day</span><span class="p">.</span><span class="nx">factory</span>
+
+        <span class="nx">_</span><span class="p">(</span><span class="nx">dayNames</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="nf">(dayName) -&gt;</span>
+          <span class="nv">idx = </span><span class="nx">dh_get</span><span class="p">(</span><span class="nx">dayName</span><span class="p">,</span> <span class="s">&#39;index&#39;</span><span class="p">)</span>
+
+          <span class="nx">@</span><span class="p">[</span><span class="nx">dayName</span><span class="p">]</span> <span class="o">=</span> <span class="nx">newDays</span><span class="p">[</span><span class="nx">idx</span><span class="p">]</span>
+        <span class="nx">@__days</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="nx">@setDays</span> <span class="nx">obj_to_array</span><span class="p">(</span><span class="nx">days</span><span class="p">)</span>
+
+      <span class="k">return</span> <span class="k">this</span>
+
+    <span class="nv">today: </span><span class="o">-&gt;</span>
+      <span class="k">return</span> <span class="nx">@day</span> <span class="nx">currentDay</span><span class="p">()</span>
+
+    <span class="nv">isClosed: </span><span class="nf">(now) -&gt;</span> <span class="nx">@today</span><span class="p">().</span><span class="nx">isClosed</span><span class="p">(</span><span class="nx">now</span><span class="p">)</span>
+
+    <span class="nv">isOpen: </span><span class="nf">(now = false) -&gt;</span>
+      <span class="k">if</span> <span class="nx">now</span><span class="o">?</span> <span class="o">and</span> <span class="nx">moment</span><span class="p">.</span><span class="nx">isMoment</span><span class="p">(</span><span class="nx">now</span><span class="p">)</span>
+        <span class="nx">@day</span><span class="p">(</span><span class="nx">now</span><span class="p">.</span><span class="nx">day</span><span class="p">())</span><span class="o">?</span><span class="p">.</span><span class="nx">isOpen</span><span class="p">(</span><span class="nx">now</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="nx">@today</span><span class="p">().</span><span class="nx">isOpen</span><span class="p">(</span><span class="nx">now</span><span class="p">)</span>
+
+    <span class="nv">toJSON: </span><span class="o">-&gt;</span>
+      <span class="nx">_</span><span class="p">.</span><span class="nx">invoke</span><span class="p">(</span><span class="nx">@getDays</span><span class="p">(),</span> <span class="s">&#39;toJSON&#39;</span><span class="p">)</span>
+
+    <span class="nv">toString: </span><span class="nf">(useHTML = false) -&gt;</span>
+      <span class="nx">_</span><span class="p">(</span><span class="nx">@getDays</span><span class="p">()).</span><span class="nx">map</span><span class="p">(</span><span class="nb">String</span><span class="p">).</span><span class="nx">join</span><span class="p">(</span><span class="s">&#39;\n&#39;</span><span class="p">)</span></pre></div></td></tr><tr id="section-39"><td class="docs"><div class="pilwrap"><a href="#section-39" class="pilcrow">&#182;</a></div><p>Return an object to use as the base <code>__days</code> property.</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">generate_base_days = </span><span class="o">-&gt;</span>
+      <span class="nv">Sunday: </span><span class="kc">false</span>
+      <span class="nv">Monday: </span><span class="kc">false</span>
+      <span class="nv">Tuesday: </span><span class="kc">false</span>
+      <span class="nv">Wednesday: </span><span class="kc">false</span>
+      <span class="nv">Thursday: </span><span class="kc">false</span>
+      <span class="nv">Friday: </span><span class="kc">false</span>
+      <span class="nv">Saturday: </span><span class="kc">false</span></pre></div></td></tr><tr id="section-40"><td class="docs"><div class="pilwrap"><a href="#section-40" class="pilcrow">&#182;</a></div><p>Given an array containing schedule options under an index,
+return an array that fills in any undefined indices with
+the default <code>{open: false}</code>.</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">array_defaults = </span><span class="nf">(array_of_days) -&gt;</span>
+      <span class="nv">array_of_days = </span><span class="nx">_</span><span class="p">.</span><span class="nx">toArray</span><span class="p">(</span><span class="nx">array_of_days</span><span class="p">)</span> <span class="nx">unless</span> <span class="nx">_</span><span class="p">.</span><span class="nx">isArray</span><span class="p">(</span><span class="nx">array_of_days</span><span class="p">)</span>
+
+      <span class="nx">_</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="nx">chain</span><span class="p">().</span><span class="nx">range</span><span class="p">(</span><span class="mi">7</span><span class="p">).</span><span class="nx">map</span><span class="p">(</span><span class="nf">(idx) -&gt;</span>
+        <span class="nx">array_of_days</span><span class="p">[</span><span class="nx">idx</span><span class="p">]</span> <span class="o">or</span> <span class="p">{</span><span class="nv">open: </span><span class="kc">false</span><span class="p">}</span>
+      <span class="p">).</span><span class="nx">value</span><span class="p">()</span></pre></div></td></tr><tr id="section-41"><td class="docs"><div class="pilwrap"><a href="#section-41" class="pilcrow">&#182;</a></div><p>Convert an object with day names as keys to an array
+with the day's corresponding index holding the value</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="nv">obj_to_array = </span><span class="nf">(o = {}) -&gt;</span>
+      <span class="nx">_</span><span class="p">(</span><span class="nx">o</span><span class="p">).</span><span class="nx">reduce</span><span class="p">(</span><span class="nf">(indexed_days, values, key) -&gt;</span>
+        <span class="nv">idx = </span><span class="nx">dh_get</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="s">&#39;index&#39;</span><span class="p">)</span>
+
+        <span class="nx">indexed_days</span><span class="p">[</span><span class="nx">idx</span><span class="p">]</span> <span class="o">=</span> <span class="nx">values</span> <span class="k">if</span> <span class="nx">idx</span><span class="o">?</span>
+
+        <span class="nx">indexed_days</span>
+      <span class="p">[])</span></pre></div></td></tr><tr id="section-42"><td class="docs"><div class="pilwrap"><a href="#section-42" class="pilcrow">&#182;</a></div><p>Export other classes for unit testing.</p>
+</td><td class="code"><div class="highlight"><pre>    <span class="vi">@Day = </span><span class="nx">Day</span>
+    <span class="vi">@DayHelper = </span><span class="nx">DayHelper</span>
+    <span class="vi">@Helpers = </span><span class="nx">Helpers</span>
+    <span class="vi">@Point = </span><span class="nx">Point</span>
+
+  <span class="k">if</span> <span class="nx">module</span><span class="o">?</span>
+    <span class="nv">module.exports = </span><span class="nx">Week</span>
+
+  <span class="k">return</span> <span class="nx">Week</span>
+
+<span class="k">if</span> <span class="nx">define</span><span class="o">?</span><span class="p">.</span><span class="nx">amd</span><span class="o">?</span>
+  <span class="nx">define</span> <span class="nx">factory</span>
+<span class="k">else</span> <span class="k">if</span> <span class="nx">module</span><span class="o">?</span>
+  <span class="nx">factory</span> <span class="nx">require</span><span class="p">,</span> <span class="nx">module</span><span class="p">.</span><span class="nx">exports</span><span class="p">,</span> <span class="nx">module</span>
+<span class="k">else</span>
+  <span class="vi">@SimpleSchedule = </span><span class="nx">factory</span><span class="p">()</span>
+
+</pre></div></td></tr></tbody></table><div id="generated">generated Wed Jan 02 2013 16:30:23 GMT-0800 (PST)  </div><div id="projectname"><a href="../index.html">SimpleSchedule</a></div></div></body></html>
