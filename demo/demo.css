@@ -1,0 +1,34 @@
+.json-box pre,
+.json-box .json-tree-container {
+  margin-top: 20px;
+  max-height: 380px;
+  overflow-y: scroll;
+}
+
+.json-box, .js-box {
+  overflow-x: scroll;
+}
+
+.js-box pre {
+  white-space: pre;
+  display: inline-block;
+  zoom: 1;
+  *display: inline;
+}
+
+.json-tree {
+  font-family: Consolas, 'Liberation Mono', Courier, monospace;
+}
+
+.json-tree-header {
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.json-tree [data-toggle="collapse"].collapsed:before {
+  content: '+ ';
+}
+
+.json-tree [data-toggle="collapse"]:before {
+  content: '- ';
+}
