@@ -1,0 +1,18 @@
+{
+	"browser": true,
+	"node": true,
+	"laxbreak": true,
+	"laxcomma": true,
+	"eqnull": true,
+	"es5": true,
+	"undef": true,
+	"trailing": true,
+	"newcap": false,
+	"validthis": true,
+	"expr": true,
+	"shadow": true,
+	"predef": [
+		"define",
+		"require"
+	]
+}

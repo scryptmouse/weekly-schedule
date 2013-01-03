@@ -1,0 +1,38 @@
+{
+  "name": "simple-schedule",
+
+  "version": "0.0.1",
+
+  "description": "A simple weekly schedule library",
+
+  "main": "./dist/schedule",
+
+  "scripts": {
+    "test": "vows --spec --isolate"
+  },
+
+  "author": {
+    "name": "Alexa Grey",
+    "site": "http://alexa.is"
+  },
+
+  "dependencies": {
+    "moment": "1.7.0",
+    "underscore": "1.4.x",
+    "coffee-script": "1.4.x"
+  },
+
+  "devDependencies": {
+    "vows": "0.6.x",
+    "grunt": "0.3.x",
+    "grunt-vows": "0.3.x",
+    "grunt-docco-husky": "0.0.x",
+    "grunt-contrib-copy": "0.3.x"
+  },
+
+  "readme": "README.md",
+
+  "engines": {
+    "node": "*"
+  }
+}
