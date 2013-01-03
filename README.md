@@ -24,14 +24,14 @@ It transparently uses AMD or CommonJS (in node.js), or it will attach itself to 
     // #=> false
     schedule.isClosed(middle_of_the_night);
     // #=> true
-    
+
     // If no time is provided, it will default to the current time.
     schedule.isOpen();
     // #=> true / false depending
 
 
-* [annotated source code](https://scryptmouse.github.com/simple-schedule/src/schedule.coffee "Annotated source code")
-* [demo](https://scryptmouse.github.com/simple-schedule/demo/index.htm "simple-schedule demo")
+* [annotated source code](http://scryptmouse.github.com/simple-schedule/src/schedule.coffee "Annotated source code")
+* [demo](http://scryptmouse.github.com/simple-schedule/demo/index.htm "simple-schedule demo")
 
 ## Todo
 * Timezone support for client-side usage
