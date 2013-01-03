@@ -454,7 +454,7 @@
     Week = (function() {
       var array_defaults, generate_base_days, obj_to_array;
 
-      Week.name = "SimpleSchedule";
+      Week.name = "WeeklySchedule";
 
       function Week(params) {
         params || (params = generate_base_days());
@@ -575,7 +575,7 @@
   } else if (typeof module !== "undefined" && module !== null) {
     factory(require, module.exports, module);
   } else {
-    this.SimpleSchedule = factory();
+    this.WeeklySchedule = factory();
   }
 
 }).call(this);

@@ -1,12 +1,12 @@
-<!DOCTYPE html><html><head><title>README</title><meta http-equiv="Content-Type" content="text/html" charset="UTF-8"><link rel="stylesheet" media="all" href="./docco.css"></head><body><div id="container"><div id="background"></div><div id="jump_to">Jump To &hellip;<div id="jump_wrapper"><div id="jump_page"><a href="./index.html" class="source"><span class="file_name">README</span></a><a href="./src/schedule.coffee.html" class="source "><span class="base_path">src / </span><span class="file_name">schedule.coffee</span></a></div></div></div><table cellpadding="0" cellspacing="0"><thead><tr><th class="docs"></th><th class="code"></th></tr></thead><tbody><tr id="section"><td class="docs"><h1>simple-schedule
-</h1><p>A simple weekly schedule library</p><h3>Version</h3><p>0.0.1</p><h3>Author</h3><p>Alexa Grey<undefined></p><h3>Dependencies </h3><ul><li><b>moment </b><span>1.7.0</span></li><li><b>underscore </b><span>1.4.x</span></li><li><b>coffee-script </b><span>1.4.x</span></li></ul><p><h3>Stats</h3><pre class="code_stats">
+<!DOCTYPE html><html><head><title>README</title><meta http-equiv="Content-Type" content="text/html" charset="UTF-8"><link rel="stylesheet" media="all" href="./docco.css"></head><body><div id="container"><div id="background"></div><div id="jump_to">Jump To &hellip;<div id="jump_wrapper"><div id="jump_page"><a href="./index.html" class="source"><span class="file_name">README</span></a><a href="./src/schedule.coffee.html" class="source "><span class="base_path">src / </span><span class="file_name">schedule.coffee</span></a></div></div></div><table cellpadding="0" cellspacing="0"><thead><tr><th class="docs"></th><th class="code"></th></tr></thead><tbody><tr id="section"><td class="docs"><h1>weekly-schedule
+</h1><p>A simple weekly schedule library</p><h3>Version</h3><p>0.0.1</p><h3>Author</h3><p>Alexa Grey<undefined></p><h3>Repository</h3><p>git - http://github.com/scryptmouse/weekly-schedule.git</p><h3>Dependencies </h3><ul><li><b>moment </b><span>1.7.0</span></li><li><b>underscore </b><span>1.4.x</span></li><li><b>coffee-script </b><span>1.4.x</span></li></ul><p><h3>Stats</h3><pre class="code_stats">
 http://cloc.sourceforge.net v 1.55  T=0.5 s (2.0 files/s, 910.0 lines/s)
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
 CoffeeScript                     1            106             69            280
 -------------------------------------------------------------------------------
-</pre></p></td><td id="content" class="code"><h1>simple-schedule</h1>
+</pre></p></td><td id="content" class="code"><h1>weekly-schedule</h1>
 
 <h3>A simple weekly schedule library</h3>
 
@@ -14,11 +14,11 @@ CoffeeScript                     1            106             69            280
 
 <p>Presently, it supports basic isOpen, isClosed functionality.</p>
 
-<p>It transparently uses AMD or CommonJS (in node.js), or it will attach itself to the global object in other instances as <code>SimpleSchedule</code>. It requires [underscore.js] (http://underscorejs.org/ "Underscore.js") and <a href="http://momentjs.com/" title="Moment.js | Parse, validate, manipulate, and display dates in javascript.">moment</a>.</p>
+<p>It transparently uses AMD or CommonJS (in node), or it will attach itself to the global object in other instances as <code>WeeklySchedule</code>. It requires [underscore.js] (http://underscorejs.org/ "Underscore.js") and <a href="http://momentjs.com/" title="Moment.js | Parse, validate, manipulate, and display dates in javascript.">moment</a>.</p>
 
 <h2>Example</h2>
 
-<pre><code>var schedule = new SimpleSchedule(json_schedule);
+<pre><code>var schedule = new WeeklySchedule(json_schedule);
 
 // Assuming you're open at noon on Tuesdays…
 var tuesday_at_noon = moment().hours(12).day(2);
@@ -42,8 +42,8 @@ schedule.isOpen();
 </code></pre>
 
 <ul>
-<li><a href="http://scryptmouse.github.com/simple-schedule/src/schedule.coffee" title="Annotated source code">annotated source code</a></li>
-<li><a href="http://scryptmouse.github.com/simple-schedule/demo/index.htm" title="simple-schedule demo">demo</a></li>
+<li><a href="http://scryptmouse.github.com/weekly-schedule/src/schedule.coffee" title="Annotated source code">annotated source code</a></li>
+<li><a href="http://scryptmouse.github.com/weekly-schedule/demo/index.htm" title="weekly-schedule demo">demo</a></li>
 </ul>
 
 <h2>Todo</h2>
@@ -77,4 +77,4 @@ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
 HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
 WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
 FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.</p>  </td></tr></tbody></table><div id="generated">generated Wed Jan 02 2013 16:41:19 GMT-0800 (PST)  </div><div id="projectname"><a href="./index.html">SimpleSchedule</a></div></div></body></html>
+OTHER DEALINGS IN THE SOFTWARE.</p>  </td></tr></tbody></table><div id="generated">generated Wed Jan 02 2013 17:40:59 GMT-0800 (PST)  </div><div id="projectname"><a href="./index.html">WeeklySchedule</a></div></div></body></html>
