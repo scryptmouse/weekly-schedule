@@ -361,7 +361,6 @@ factory = (require, exports, module) ->
   # # Week
   # Main schedule class.
   class Week
-    @name: "WeeklySchedule"
     constructor: (params) ->
       params ||= generate_base_days()
 
