@@ -454,8 +454,6 @@
     Week = (function() {
       var array_defaults, generate_base_days, obj_to_array;
 
-      Week.name = "WeeklySchedule";
-
       function Week(params) {
         params || (params = generate_base_days());
         this.setDays(params);
